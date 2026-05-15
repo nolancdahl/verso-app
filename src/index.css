@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Warm Curves';
+  src: url('./fonts/warm-curves/WarmCurvesPersonalUseOnlyR-4n1PB.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'WS Paradose';
+  src: url('./fonts/paradose/WsParadose-Clean.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-brand-50: #f0f7ff;
+  --color-brand-100: #e0efff;
+  --color-brand-200: #b8dbff;
+  --color-brand-300: #7abfff;
+  --color-brand-400: #3a9eff;
+  --color-brand-500: #1a7fef;
+  --color-brand-600: #0a62cc;
+  --color-brand-700: #094ea5;
+  --color-brand-800: #0d4388;
+  --color-brand-900: #113970;
+  --color-sage-50: #fff1ec;
+  --color-sage-100: #ffe0d4;
+  --color-sage-200: #ffcab5;
+  --color-sage-300: #f4a58a;
+  --color-sage-400: #ee8e72;
+  --color-sage-500: #e87b5c;
+  --color-sage-600: #e06c4a;
+  --color-sage-700: #c95d3e;
+  --color-sage-800: #a54e34;
+  --color-sage-900: #7e3c28;
+  --color-warm-50: #f4f3ee;
+  --color-warm-100: #eae8e0;
+  --color-warm-200: #dddbd0;
+  --color-warm-300: #c9c6b8;
+  --color-warm-400: #b1ada1;
+  --color-warm-500: #9a968a;
+  --color-warm-600: #7e7b70;
+  --color-warm-700: #5e5c53;
+  --color-warm-800: #3a3936;
+  --color-warm-900: #141413;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-warm-50 text-gray-900 font-sans antialiased;
+    margin: 0;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.25s ease-out;
+}
+
+@keyframes typing-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+.typing-dots::after {
+  content: '';
+  animation: typing-dots 1.6s steps(1) infinite;
+}
+
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop-in {
+  animation: pop-in 0.2s ease-out;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.animate-check-pop {
+  animation: check-pop 0.25s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Flame — 20 frames cycling over 2s */
+.fl-1,.fl-2,.fl-3,.fl-4,.fl-5,.fl-6,.fl-7,.fl-8,.fl-9,.fl-10,
+.fl-11,.fl-12,.fl-13,.fl-14,.fl-15,.fl-16,.fl-17,.fl-18,.fl-19,.fl-20 { opacity: 0; }
+.fl-1  { animation: f1  2s steps(1) infinite; }
+.fl-2  { animation: f2  2s steps(1) infinite; }
+.fl-3  { animation: f3  2s steps(1) infinite; }
+.fl-4  { animation: f4  2s steps(1) infinite; }
+.fl-5  { animation: f5  2s steps(1) infinite; }
+.fl-6  { animation: f6  2s steps(1) infinite; }
+.fl-7  { animation: f7  2s steps(1) infinite; }
+.fl-8  { animation: f8  2s steps(1) infinite; }
+.fl-9  { animation: f9  2s steps(1) infinite; }
+.fl-10 { animation: f10 2s steps(1) infinite; }
+.fl-11 { animation: f11 2s steps(1) infinite; }
+.fl-12 { animation: f12 2s steps(1) infinite; }
+.fl-13 { animation: f13 2s steps(1) infinite; }
+.fl-14 { animation: f14 2s steps(1) infinite; }
+.fl-15 { animation: f15 2s steps(1) infinite; }
+.fl-16 { animation: f16 2s steps(1) infinite; }
+.fl-17 { animation: f17 2s steps(1) infinite; }
+.fl-18 { animation: f18 2s steps(1) infinite; }
+.fl-19 { animation: f19 2s steps(1) infinite; }
+.fl-20 { animation: f20 2s steps(1) infinite; }
+@keyframes f1  { 0%   { opacity:1; } 5%   { opacity:0; } }
+@keyframes f2  { 5%   { opacity:1; } 10%  { opacity:0; } }
+@keyframes f3  { 10%  { opacity:1; } 15%  { opacity:0; } }
+@keyframes f4  { 15%  { opacity:1; } 20%  { opacity:0; } }
+@keyframes f5  { 20%  { opacity:1; } 25%  { opacity:0; } }
+@keyframes f6  { 25%  { opacity:1; } 30%  { opacity:0; } }
+@keyframes f7  { 30%  { opacity:1; } 35%  { opacity:0; } }
+@keyframes f8  { 35%  { opacity:1; } 40%  { opacity:0; } }
+@keyframes f9  { 40%  { opacity:1; } 45%  { opacity:0; } }
+@keyframes f10 { 45%  { opacity:1; } 50%  { opacity:0; } }
+@keyframes f11 { 50%  { opacity:1; } 55%  { opacity:0; } }
+@keyframes f12 { 55%  { opacity:1; } 60%  { opacity:0; } }
+@keyframes f13 { 60%  { opacity:1; } 65%  { opacity:0; } }
+@keyframes f14 { 65%  { opacity:1; } 70%  { opacity:0; } }
+@keyframes f15 { 70%  { opacity:1; } 75%  { opacity:0; } }
+@keyframes f16 { 75%  { opacity:1; } 80%  { opacity:0; } }
+@keyframes f17 { 80%  { opacity:1; } 85%  { opacity:0; } }
+@keyframes f18 { 85%  { opacity:1; } 90%  { opacity:0; } }
+@keyframes f19 { 90%  { opacity:1; } 95%  { opacity:0; } }
+@keyframes f20 { 95%  { opacity:1; } 100% { opacity:0; } }
