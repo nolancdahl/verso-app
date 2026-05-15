@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sun, Moon, Check, ChevronLeft, ChevronRight, Undo2 } from 'lucide-react'
 import { useRoutineCompletions, useProfile } from '../store/useStore'
-import { weeklyRoutines } from '../data/routines'
 import Header from '../components/Header'
 import CalendarDay from '../components/CalendarDay'
 
@@ -48,7 +47,6 @@ export default function HomePage() {
   const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening'
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
   const todayCompletion = completions.find(c => c.date === today)
-  const routine = weeklyRoutines[dayName]
 
   const quote = getDailyQuote()
 

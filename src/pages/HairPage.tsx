@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Camera, Plus, Scissors, ChevronDown, ChevronUp, Image, Pencil, Check, Trash2 } from 'lucide-react'
+import { Camera, Plus, Scissors, ChevronDown, ChevronUp, Image, Pencil, Check, Trash2, X } from 'lucide-react'
 import { useRef } from 'react'
 import { useHairEntries, type HairEntry } from '../store/useStore'
 import { useCamera } from '../hooks/useCamera'

@@ -14,7 +14,6 @@ export default function CalendarDay({ day, isToday, completion, streakLeft, stre
   const bothDone = amDone && pmDone
 
   const size = isToday ? 'w-11 h-11' : 'w-9 h-9'
-  const streakH = isToday ? 'h-11' : 'h-9'
 
   return (
     <div className="aspect-square flex items-center justify-center relative">

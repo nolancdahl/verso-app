@@ -20,7 +20,7 @@ import Header from '../components/Header'
 
 export default function ChatHistoryPage() {
   const { conversations, deleteConversation } = useChatHistory()
-  const { messages, loadMessages, clearMessages } = useChatMessages()
+  const { loadMessages } = useChatMessages()
   const navigate = useNavigate()
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const swipeRef = useRef<{ id: string; startX: number } | null>(null)
