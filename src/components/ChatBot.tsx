@@ -73,23 +73,16 @@ function buildSystemPrompt(
   return parts.join('\n')
 }
 
-async function callClaudeAPI(apiKey: string, systemPrompt: string, messages: ChatMessage[]): Promise<string> {
+async function callClaudeAPI(_apiKey: string, systemPrompt: string, messages: ChatMessage[]): Promise<string> {
   const apiMessages = messages.map(m => ({
     role: m.role as 'user' | 'assistant',
     content: m.content,
   }))
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/.netlify/functions/chat', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
       system: systemPrompt,
       messages: apiMessages,
     }),
@@ -104,7 +97,6 @@ async function callClaudeAPI(apiKey: string, systemPrompt: string, messages: Cha
   return data.content[0]?.text || 'Sorry, I could not generate a response.'
 }
 
-// Fallback for when no API key is set
 function stripMarkdown(text: string): string {
   return text
     .replace(/^#{1,6}\s+/gm, '')           // remove # headers
@@ -114,15 +106,6 @@ function stripMarkdown(text: string): string {
     .replace(/_(.+?)_/g, '$1')             // remove _italic_
     .replace(/`(.+?)`/g, '$1')             // remove `code`
     .replace(/```[\s\S]*?```/g, '')        // remove code blocks
-}
-
-function getLocalResponse(message: string): string {
-  const lower = message.toLowerCase()
-  if (lower.includes('retinol') || lower.includes('retinal') || lower.includes('vitamin a')) return "Retinol (Vitamin A) is the gold standard for anti-aging. Start with 0.025-0.05% and work up. Apply at night, always use SPF during the day."
-  if (lower.includes('sunscreen') || lower.includes('spf')) return "SPF is the #1 anti-aging product. Look for SPF 50+ PA++++. Korean/Japanese sunscreens have the best textures."
-  if (lower.includes('acne') || lower.includes('breakout')) return "For acne: BHA (salicylic acid 2%) for pore-clearing, benzoyl peroxide 2.5%, and niacinamide for oil control. Don't over-cleanse."
-  if (lower.includes('hair') || lower.includes('shampoo')) return "For healthy hair: minimize heat, sulfate-free shampoo, regular conditioning, weekly hair mask. Scalp health is key."
-  return "To get personalized AI-powered answers, add your Claude API key in the Profile page. For now, I can help with basics — ask about retinol, SPF, acne, or hair care!"
 }
 
 export default function ChatBot() {
@@ -153,18 +136,12 @@ export default function ChatBot() {
       timestamp: new Date().toISOString(),
     }
     addMessage(userMsg)
-    if (profile.apiKey) {
-      setLoading(true)
-      callClaudeAPI(profile.apiKey, systemPrompt, [...messages, userMsg]).then(response => {
-        addMessage({ id: (Date.now() + 1).toString(), role: 'assistant', content: response, timestamp: new Date().toISOString() })
-      }).catch(err => {
-        addMessage({ id: (Date.now() + 1).toString(), role: 'assistant', content: `Error: ${err instanceof Error ? err.message : 'API error'}`, timestamp: new Date().toISOString() })
-      }).finally(() => setLoading(false))
-    } else {
-      setTimeout(() => {
-        addMessage({ id: (Date.now() + 1).toString(), role: 'assistant', content: getLocalResponse(text), timestamp: new Date().toISOString() })
-      }, 300)
-    }
+    setLoading(true)
+    callClaudeAPI('', systemPrompt, [...messages, userMsg]).then(response => {
+      addMessage({ id: (Date.now() + 1).toString(), role: 'assistant', content: response, timestamp: new Date().toISOString() })
+    }).catch(err => {
+      addMessage({ id: (Date.now() + 1).toString(), role: 'assistant', content: `Error: ${err instanceof Error ? err.message : 'API error'}`, timestamp: new Date().toISOString() })
+    }).finally(() => setLoading(false))
   }
 
   const handleNewChat = () => {
@@ -189,36 +166,25 @@ export default function ChatBot() {
     addMessage(userMsg)
     setInput('')
 
-    if (profile.apiKey) {
-      setLoading(true)
-      try {
-        const allMessages = [...messages, userMsg]
-        const response = await callClaudeAPI(profile.apiKey, systemPrompt, allMessages)
-        addMessage({
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: response,
-          timestamp: new Date().toISOString(),
-        })
-      } catch (err) {
-        addMessage({
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: `Error: ${err instanceof Error ? err.message : 'Failed to connect to Claude API. Check your API key in Profile.'}`,
-          timestamp: new Date().toISOString(),
-        })
-      }
-      setLoading(false)
-    } else {
-      setTimeout(() => {
-        addMessage({
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: getLocalResponse(userMsg.content),
-          timestamp: new Date().toISOString(),
-        })
-      }, 300)
+    setLoading(true)
+    try {
+      const allMessages = [...messages, userMsg]
+      const response = await callClaudeAPI('', systemPrompt, allMessages)
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: response,
+        timestamp: new Date().toISOString(),
+      })
+    } catch (err) {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `Error: ${err instanceof Error ? err.message : 'Failed to connect. Try again later.'}`,
+        timestamp: new Date().toISOString(),
+      })
     }
+    setLoading(false)
   }
 
   return (
@@ -270,9 +236,6 @@ export default function ChatBot() {
             {messages.length === 0 && (
               <div className="text-center text-gray-400 py-2">
                 <MessageCircle size={32} className="mx-auto mb-3 text-sage-300" />
-                {!profile.apiKey && (
-                  <p className="text-[10px] text-gray-400 mb-2">Add your Claude API key in Profile for AI-powered answers</p>
-                )}
                 <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
                   {getRotatingPrompts().map(q => (
                     <button

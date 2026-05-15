@@ -2,8 +2,6 @@ import { useEffect } from 'react'
 import { useProfile } from '../store/useStore'
 import { IMPORTED_CONTEXT } from '../data/importedContext'
 
-const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY || ''
-
 export function useInitProfile() {
   const { profile, updateProfile } = useProfile()
 
@@ -18,7 +16,7 @@ export function useInitProfile() {
       skinGoals: profile.skinGoals || 'Anti-aging (11 lines, under-eye), texture, long-term skin health',
       hairType: profile.hairType || 'Styled diagonally, London Formal silhouette',
       hairGoals: profile.hairGoals || 'Clean structured flow, volume, healthy scalp',
-      apiKey: profile.apiKey || API_KEY,
+      apiKey: profile.apiKey || '',
       importedContext: IMPORTED_CONTEXT,
     })
 
